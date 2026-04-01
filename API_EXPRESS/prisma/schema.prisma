@@ -10,13 +10,29 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
 }
 
-model log {
-  id          Int @id @default(autoincrement())
-  action      String 
-  todoId      Int
-  message     String?
-  createdAt   DateTime @default(now())
+model Usuario {
+  id              Int     @id @default(autoincrement())
+  nome            String 
+  email           String  @unique
+  senha           String  
+
+  tarefas Tarefa[]
+
+  @@map("usuarios")
 }
+
+model Tarefa {
+  id              Int @id @default(autoincrement())
+  titulo          String 
+  concluida       Boolean @default(false)
+
+  usuarioId       Int
+  usuario         Usuario @relation(fields: [usuarioId], references: [id])
+
+  @@map("tarefas")
+}
+
+
